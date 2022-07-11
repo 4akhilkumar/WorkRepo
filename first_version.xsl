@@ -110,7 +110,7 @@ SET @Barcode = BarCodeURL(@OrderNum,'Code93', 400, 80, 0)]%%
 				<table align="center" class="em_main_table" width="640" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed; width:640px;" bgcolor="#ffffff">
 					<tbody>
 						<tr>
-							<td height="47" class="em_height">
+							<td height="20" class="em_height">
 								<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/spacer.gif" height="1" width="1" alt="" style="display:block;border:none;" />
 							</td>
 						</tr>
@@ -118,29 +118,9 @@ SET @Barcode = BarCodeURL(@OrderNum,'Code93', 400, 80, 0)]%%
 							<td valign="top" align="center" style="padding:0px 63px;" class="em_aside">
 								<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
 									<tr>
-
-										<td class="em_black" width="190" valign="top" align="center" style="font-family: Arial, sans-serif;font-size:14px;color:#000000;line-height:16px;">ITEMS READY TO PICK UP</td>
-										<td width="37" class="em_side">
-											<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/spacer.gif" height="1" width="1" alt="" style="display:block;border:none;" />
-										</td>
-										<td valign="top" align="center">
-											<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
-												<tr>
-													<td height="7" style="line-height: 0px;font-size: 0px;">
-														<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/spacer.gif" height="1" width="1" alt="" style="display:block;border:none;" />
-													</td>
-												</tr>
-												<tr>
-													<td height="1" bgcolor="#ffffff" style="line-height:1px;font-size:1px;">
-														<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/spacer.gif" height="1" width="1" alt="" style="display:block;border:none;" />
-													</td>
-												</tr>
-												<tr>
-													<td height="8" style="line-height: 0px;font-size: 0px;">
-														<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/spacer.gif" height="1" width="1" alt="" style="display:block;border:none;" />
-													</td>
-												</tr>
-											</table>
+										<td class="em_black" valign="top" align="left" style="width:50%; font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; letter-spacing: 3px;">ITEMS READY TO PICK UP</td>
+										<td class="em_side">
+											<hr/>
 										</td>
 									</tr>
 								</table>
@@ -156,13 +136,7 @@ SET @Barcode = BarCodeURL(@OrderNum,'Code93', 400, 80, 0)]%%
 			</td>
 		</tr>
 		<!--     //DIVIDER     -->
-		<!--
-
-
-
-
-Counts the number of item in items and also changes the table layout
--->
+		<!-- Counts the number of item in items and also changes the table layout -->
 		<xsl:choose>
 			<xsl:when test="count(//message/additional-content/order/order-change/items/item) > 10">
 %%[ VAR @WidthTD, @Breaks, @WidthTB SET @WidthTD = 37 SET @WidthTB = 300 SET @WidthTB2 = 185 SET @AlignText = 'center' SET @Breaks = ', ' ]%%
@@ -181,274 +155,186 @@ Counts the number of item in items and also changes the table layout
 						<td valign="top" align="center" class="em_aside" style="padding-left: 63px;padding-right: 63px;">
 							<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td valign="top" align="%%=v(@AlignText)=%%" width="346" style="font-family:Arial, sans-serif; font-size:14px;color: #1d1d1d;font-weight: bold;">Description</td>
-									<td valign="top" class="em_hide" align="%%=v(@AlignText)=%%" width="170" style="font-family:Arial, sans-serif; font-size:14px;color: #1d1d1d;font-weight: bold;">Price</td>
+									<td valign="top" align="center" width="346" style="font-family:Arial, sans-serif; font-size:14px;color: #1d1d1d;font-weight: bold;"> <!-- Image TD No need to insert here --> </td>
+									<td valign="top" align="left" width="346" style="font-family:Arial, sans-serif; font-size:14px;color: #1d1d1d;font-weight: bold;">Description</td>
+									<td valign="top" class="em_hide" align="right" width="170" style="font-family:Arial, sans-serif; font-size:14px;color: #1d1d1d;font-weight: bold;">Price</td>
 								</tr>
+								<tr>
+									<td height="15" class="em_height">
+									</td>
+								</tr>
+								<!-- Begin: Insert Items here through iteration -->
+								
+								<!-- Testing Code Main(): Begin -->
+								<xsl:for-each select="message/additional-content/order/order-change/items/item">
+									<xsl:variable name="VImageURL">
+										<xsl:call-template name="string-replace-all">
+											<xsl:with-param name="text" select="image" />
+											<xsl:with-param name="replace" select="'myer-media.online.aws.myer.internal'" />
+											<xsl:with-param name="by" select="'myer.com.au'" />
+										</xsl:call-template>
+									</xsl:variable>
+									<xsl:variable name="Vdescription">
+										<xsl:value-of select="description" />
+									</xsl:variable>
+									<xsl:if test="fulfillment-method!=''">
+										%%[ SET @DelType = "
+										<xsl:value-of select="fulfillment-method" />
+										" 
+						SET @DelMethd = "
+										<xsl:value-of select="delivery-method" />
+										" IF @DelType == 'SHP' THEN (IF (@DelMethd=='SAME_DAY_SHIP') THEN SET @VDelMethd='Same Day Delivery' ELSEIF (@DelMethd=='NEXT_DAY_SHIP') THEN SET @VDelMethd='Next Day Delivery' ELSEIF (@DelMethd=='STANDARD') THEN SET @VDelMethd='Standard' ENDIF) ELSE SET @VDelMethd = 'Click &amp; Collect' ENDIF]%%
+									</xsl:if>
+									<xsl:if test="image!=''">
+										%%[ set @imageurl = ReplaceList("
+										<xsl:value-of select="image" />
+										","myer.com.au","myer-media.online.aws.myer.internal","wcsadminprod.myer.com.au") ]%%
+									</xsl:if>
+								<!-- Testing Code Main(): End -->
+								<tr>
+									<td valign="top" align="center" width="346" style="font-family:Arial, sans-serif; font-size:14px;color: #1d1d1d;font-weight: bold;"> 
+										<!-- Insert Image Here --> 
+										<xsl:choose>
+											<xsl:when test="image!=''">
+												<img src="%%=v(@imageurl)=%%" alt="{$Vdescription}" width="%%=v(@WidthTD)=%%" class="em_full_img" style="display: block; max-width: %%=v(@WidthTD)=%%px;" border="0" />
+											</xsl:when>
+											<xsl:otherwise>
+												<img src="http://de3u9r6k5xww7.cloudfront.net/wp-content/uploads/2012/07/Myer_logo.jpg" alt="%%item_name%%" width="%%=v(@WidthTD)=%%" class="em_full_img" style="display: block; max-width:%%=v(@WidthTD)=%%px" border="0" />
+											</xsl:otherwise>
+										</xsl:choose>
+										<!-- Insert Image Here --> 
+									</td>
+									<td valign="top" align="left" width="346" style="font-family:Arial, sans-serif; font-size:14px;color: #1d1d1d;">
+										<div class="item_details">
+											<div class="item_name">
+												<!-- <p>Desert Bloom 12pc Dinner Set Midnight Blue</p> -->
+												<p>
+													<xsl:value-of select="description" />
+												</p>
+											</div>
+											<div class="item_price">
+												<span class="item_price">
+													$ <xsl:value-of select="unit-price" />
+												</span>
+												<br/>
+												<xsl:if test="clearance-item!=''">
+												<span class="tag" style="color: #e63f64; font-weight: 600; font-size: 12px;">
+													<!-- Clearance -->
+														<xsl:value-of select="clearance-item" />
+													</span>
+												</xsl:if>
+											</div>
+											<div class="staf-discount" style="color: #e63f64; font-size: 14px;">
+												<p>
+													<!-- Staff -$10.00 -->
+													<xsl:if test="discounts/discount/amount!=''">
+														<xsl:for-each select="discounts/discount">
+															<xsl:choose>
+																<xsl:when test="contains(Type, 'MyerStaffDiscount')">
+																	Staff -$ <xsl:value-of select="amount" />
+																</xsl:when>
+																<xsl:otherwise>
+																	Discount -$ <xsl:value-of select="amount" />
+																</xsl:otherwise>
+															</xsl:choose>
+														</xsl:for-each>
+													</xsl:if>
+													<!--     Loop the charge amount     -->
+													<xsl:if test="Charges/Charge/amount!=''">
+														<xsl:for-each select="Charges/Charge">
+															<xsl:choose>
+																<xsl:when test="contains(Type, 'GIFT')">
+																	Gift Wrap $	<xsl:value-of select="amount" />
+																</xsl:when>
+																<xsl:otherwise>
+																	<xsl:value-of select="Type" /> $ <xsl:value-of select="amount" />
+																</xsl:otherwise>
+															</xsl:choose>
+														</xsl:for-each>
+													</xsl:if>
+												</p>
+											</div>
+											<div class="other_item_details" style="display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr);">
+												<xsl:if test="colour!=''">
+												<div class="color">
+													<span>
+														<!-- Colour: Black -->
+															Color: <xsl:value-of select="colour" />
+														</span>
+													</div>
+												</xsl:if>
+												<xsl:if test="OrderQty!=''">
+												<div class="item_qty">
+													<span>
+														<!-- QTY: 1 -->
+															QTY: <xsl:value-of select="OrderQty" />
+														</span>
+													</div>
+												</xsl:if>
+												<xsl:if test="size1!=''">
+												<div class="item_size">
+													<span>
+														<!-- Size: Small -->
+															Size: <xsl:value-of select="size1" /> <xsl:if test="size2!=''"> <xsl:value-of select="size2" /> </xsl:if>															
+														</span>
+													</div>
+												</xsl:if>
+												<xsl:if test="item-id!=''">
+												<div class="item_sku">
+													<span>
+														<!-- SKU: 23455524 -->
+															SKU: <xsl:value-of select="item-id" />	
+														</span>
+													</div>
+												</xsl:if>
+											</div>
+										</div>
+									</td>
+									<td valign="top" class="em_hide" align="right" width="170" style="font-family:Arial, sans-serif; font-size:14px;color: #1d1d1d;font-weight: bold;">
+										<p>
+											<!-- $89.95 -->
+											<xsl:value-of select="unit-price" />
+										</p>
+									</td>
+								</tr>
+								<tr>
+									<td valign="top" align="center" width="346" style="font-family:Arial, sans-serif; font-size:14px;color: #1d1d1d;font-weight: bold;"> <!-- Image TD No need to insert here --> </td>
+									<td valign="top" align="left" width="346" style="font-family:Arial, sans-serif; font-size:14px;color: #1d1d1d;font-weight: bold;">
+										<div class="msg_wrap">
+											<div class="msg_icon">
+												<img src="" alt="" />
+											</div>
+											<div class="msg" style="font-size: 16px;">Message only	</div>
+										</div>
+									</td>
+									<td valign="top" class="em_hide" align="right" width="170" style="font-family:Arial, sans-serif; font-size:14px;color: #1d1d1d;font-weight: bold;">
+										<div class="msg_wrap">
+											<div class="msg_icon">
+												<img src="#" alt="" />
+											</div>
+											<div class="msg" style="font-size: 16px;">
+												$7.95
+												<!-- Message price -->
+											</div>
+										</div>
+									</td>
+								</tr>
+							</xsl:for-each>
+								
+							<!-- End: Insert Items here through iteration -->
 							</table>
 						</td>
 					</tr>
 				</table>
 			</td>
 		</tr>
-		<tr>
-			<td height="15" class="em_height">
-				<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/spacer.gif" height="1" width="1" alt="" style="display:block;border:none;" />
-			</td>
-		</tr>
-		<!--     PRODUCT_ITEM: LARGE     -->
-		<xsl:for-each select="message/additional-content/order/order-change/items/item">
-			<xsl:variable name="VImageURL">
-				<xsl:call-template name="string-replace-all">
-					<xsl:with-param name="text" select="image" />
-					<xsl:with-param name="replace" select="'myer-media.online.aws.myer.internal'" />
-					<xsl:with-param name="by" select="'myer.com.au'" />
-				</xsl:call-template>
-			</xsl:variable>
-			<xsl:variable name="Vdescription">
-				<xsl:value-of select="description" />
-			</xsl:variable>
-			<xsl:if test="fulfillment-method!=''">
-				%%[ SET @DelType = "
-				<xsl:value-of select="fulfillment-method" />
-				" 
-SET @DelMethd = "
-				<xsl:value-of select="delivery-method" />
-				" IF @DelType == 'SHP' THEN (IF (@DelMethd=='SAME_DAY_SHIP') THEN SET @VDelMethd='Same Day Delivery' ELSEIF (@DelMethd=='NEXT_DAY_SHIP') THEN SET @VDelMethd='Next Day Delivery' ELSEIF (@DelMethd=='STANDARD') THEN SET @VDelMethd='Standard' ENDIF) ELSE SET @VDelMethd = 'Click &amp; Collect' ENDIF]%%
-			</xsl:if>
-			<xsl:if test="image!=''">
-				%%[ set @imageurl = ReplaceList("
-				<xsl:value-of select="image" />
-				","myer.com.au","myer-media.online.aws.myer.internal","wcsadminprod.myer.com.au") ]%%
-			</xsl:if>
-			<!--     DESKTOP_PRODUCT_LARGE_4     -->
-			<tr>
-				<td align="center" valign="top">
-					<table align="center" class="em_main_table" bgcolor="#ffffff" width="640" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed; width:640px;">
-						<tr>
-							<td height="30" class="em_height" style="line-height:0px; font-size:0px; ">
-								<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/1503390624690_spacer.gif" width="1" height="1" alt="" border="0" style="display:block;" />
-							</td>
-						</tr>
-						<tr>
-							<td valign="top" align="center" class="em_aside" style="padding-left: 63px;padding-right: 63px;">
-								<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
-									<tr>
-										<td valign="top" align="center" width="%%=v(@WidthTD)=%%" class="em_full_img1">
-											<!--     ITEM_IMAGE     -->
-											<xsl:choose>
-												<xsl:when test="image!=''">
-													<img src="%%=v(@imageurl)=%%" alt="{$Vdescription}" width="%%=v(@WidthTD)=%%" class="em_full_img" style="display: block; max-width: %%=v(@WidthTD)=%%px;" border="0" />
-												</xsl:when>
-												<xsl:otherwise>
-													<img src="http://de3u9r6k5xww7.cloudfront.net/wp-content/uploads/2012/07/Myer_logo.jpg" alt="%%item_name%%" width="%%=v(@WidthTD)=%%" class="em_full_img" style="display: block; max-width:%%=v(@WidthTD)=%%px" border="0" />
-												</xsl:otherwise>
-											</xsl:choose>
-											<!--     //ITEM_IMAGE     -->
-										</td>
-										<td width="16" style="width: 16px;" class="em_side">
-											<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/1503390624690_spacer.gif" width="1" height="1" alt="" border="0" style="display:block;" />
-										</td>
-										<td valign="top" align="center">
-											<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
-												<tr>
-													<td valign="top" align="center">
-														<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
-															<tr>
-																<td valign="top" align="center">
-																	<table width="%%=v(@WidthTB)=%%" style="width: %%=v(@WidthTB)=%%px;" class="em_wrapper" align="left" border="0" cellspacing="0" cellpadding="0">
-																		<tr>
-																			<td align="center" valign="top">
-																				<table width="%%=v(@WidthTB)=%%" style="width: %%=v(@WidthTB)=%%px;" class="em_wrapper" align="center" border="0" cellspacing="0" cellpadding="0">
-																					<tr>
-																						<td align="left" valign="top">
-																							<table width="%%=v(@WidthTB2)=%%" style="width: %%=v(@WidthTB2)=%%px;" class="em_wrapper" align="left" border="0" cellspacing="0" cellpadding="0">
-																								<tr>
-																									<td class="em_white" valign="top" align="left" style="font-family:Arial, sans-serif; font-size:14px; line-height:16px; color:#ffffff;word-break: break-all;">
-																										<!--     ITEM_INFO     -->
-																										<strong>
-																											<xsl:value-of select="description" />
-																										</strong>
-																										<br />
-																										<xsl:if test="clearance-item!=''">
-																											<strong>
-																												<xsl:value-of select="clearance-item" />
-																											</strong>
-																										</xsl:if>
-																										<span style="font-size: 10px;">
-																											<xsl:if test="OrderQty!=''">
-																												<strong>
-																													QTY
-																													<xsl:value-of select="OrderQty" />
-																												</strong>
-																												%%=v(@Breaks)=%%
-																											</xsl:if>
-																											<xsl:if test="colour!=''">
-																												Color:
-																												<xsl:value-of select="colour" />
-																												%%=v(@Breaks)=%%
-																											</xsl:if>
-																											<xsl:if test="size1!=''">
-																												Size:
-																												<xsl:value-of select="size1" />
-																												<xsl:if test="size2!=''">
-																													<xsl:value-of select="size2" />
-																												</xsl:if>
-																												%%=v(@Breaks)=%%
-																											</xsl:if>
-																											<xsl:if test="item-id!=''">
-																												SKU:
-																												<xsl:value-of select="item-id" />
-																												%%=v(@Breaks)=%%
-																											</xsl:if>
-																										</span>
-																										<br />
 
-																									</td>
-																									<td width="10" style="width:10px;"></td>
-																								</tr>
-																								<xsl:if test="gift-message!=''">
-																									<!--     GIFT_MESSAGE     -->
-																									<tr>
-																										<td class="em_white" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 8px; line-height: 18px; color: #ffffff;padding-left:0px;">GIFT MESSAGING SELECTED </td>
-																									</tr>
-																								</xsl:if>
-																							</table>
+		<!-- Here I removed the code for testing -->
+		
+		<!-- Insert the code from nodepad -->
+		
+		<!-- Here I removed the code for testing -->
 
-																							<table width="110" style="width: 100px;" class="em_wrapper" align="right" border="0" cellspacing="0" cellpadding="0">
-																								<tr>
-																									<td align="left" valign="top">
-																										<table width="110" style="width: 110px;" class="em_wrapper" align="left" border="0" cellspacing="0" cellpadding="0">
-																											<tr>
-																												<td class="em_white em_left" valign="top" align="right" style="font-family:Arial, sans-serif; font-size:14px; line-height:18px; color:#686868; ">
-																													<strong>
-																														$
-																														<xsl:value-of select="unit-price" />
-																													</strong>
-																													<!--     Loop the discount amount     -->
-																													<xsl:if test="discounts/discount/amount!=''">
-																														<xsl:for-each select="discounts/discount">
-																															<xsl:choose>
-																																<xsl:when test="contains(Type, 'MyerStaffDiscount')">
-																																	<br />
-																																	<span style="color: #d0021b;font-size:11px;">
-																																		Staff -$
-																																		<xsl:value-of select="amount" />
-																																	</span>
-																																</xsl:when>
-																																<xsl:otherwise>
-																																	<br />
-																																	<span style="color: #d0021b;font-size:11px;">
-																																		Discount -$
-																																		<xsl:value-of select="amount" />
-																																	</span>
-																																</xsl:otherwise>
-																															</xsl:choose>
-																														</xsl:for-each>
-																													</xsl:if>
-																													<!--     Loop the charge amount     -->
-																													<xsl:if test="Charges/Charge/amount!=''">
-																														<xsl:for-each select="Charges/Charge">
-																															<xsl:choose>
-																																<xsl:when test="contains(Type, 'GIFT')">
-																																	<br />
-																																	<span style="color: #8f8d8e;font-size: 11px;">
-																																		Gift Wrap $
-																																		<xsl:value-of select="amount" />
-																																	</span>
-																																</xsl:when>
-																																<xsl:otherwise>
-																																	<br />
-																																	<span style="color: #8f8d8e;font-size: 11px;">
-																																		<xsl:value-of select="Type" />
-																																		$
-																																		<xsl:value-of select="amount" />
-																																	</span>
-																																</xsl:otherwise>
-																															</xsl:choose>
-																														</xsl:for-each>
-																													</xsl:if>
-																												</td>
-																											</tr>
-																										</table>
-																									</td>
-																								</tr>
-																							</table>
-																						</td>
-																					</tr>
-																				</table>
-																			</td>
-																		</tr>
-																	</table>
-																</td>
-																<td align="right" valign="top">
-																	<table width="80" class="em_wrapper" style="width: 80px;" align="right" border="0" cellspacing="0" cellpadding="0">
-																		<tr>
-																			<td class="em_grey2 em_left" valign="top" align="right" style="font-family:Arial, sans-serif; font-size:14px; line-height:18px; color:#686868; ">
-																				<strong>
-																					$
-																					<xsl:value-of select="total-price" />
-																				</strong>
-																			</td>
-																		</tr>
-																	</table>
-																</td>
-															</tr>
-														</table>
-													</td>
-												</tr>
-												<xsl:if test="count(item) > 10">
-													<tr>
-														<td height="6" style="line-height:0px; font-size:0px;">
-															<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/1503390624690_spacer.gif" width="1" height="1" alt="" border="0" style="display:block;" />
-														</td>
-													</tr>
-												</xsl:if>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td height="30" class="em_height" style="line-height:0px; font-size:0px;">
-								<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/1503390624690_spacer.gif" width="1" height="1" alt="" border="0" style="display:block;" />
-							</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-			<!--     //DESKTOP_PRODUCT_LARGE_4     -->
-			<xsl:if test="position() != last()">
-				<!--     ITEM_DIVIDER     -->
-				<tr>
-					<td align="center" valign="top">
-						<table align="center" class="em_main_table" bgcolor="#ffffff" width="640" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed; width: 640px;">
-							<tbody>
-								<tr>
-									<td valign="top" align="center" class="em_aside" style="padding-left: 63px; padding-right: 63px;">
-										<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
-											<tbody>
-												<tr>
-													<td height="14" style="line-height: 0px; font-size: 0px; border-bottom: 1px dashed #ffffff;">
-														<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/1503390624690_spacer.gif" alt="space" width="1" height="1" border="0" style="display: block;" />
-													</td>
-												</tr>
-												<tr>
-													<td height="14" style="line-height: 0px; font-size: 0px;">
-														<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/1503390624690_spacer.gif" alt="space" width="1" height="1" border="0" style="display: block;" />
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</td>
-				</tr>
-				<!--     ITEM_DIVIDER     -->
-			</xsl:if>
-		</xsl:for-each>
 		<!--     //PRODUCT_ITEM: LARGE     -->
 		<!--     PRODUCT_TOTAL     -->
 		<xsl:apply-templates select="message/additional-content/order/order-change/Order-Change-totals" />
@@ -482,45 +368,29 @@ SET @openingHours = 'DEFAULT FOR TEST' SET @StoreHoursFormatted = '' SET @StoreD
 				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="width: 620px;" class="em_wrapper">
 					<tr>
 						<td align="center" valign="top" style="padding: 0px 53px;" class="em_aside" bgcolor="#ffffff">
-							<table width="100%" border="0" cellspacing="0" cellpadding="0" class="em_wrapper">
+							<table style="table-layout: fixed;" width="100%" border="0" cellspacing="0" cellpadding="0" class="em_wrapper">
 								<tr>
 									<td height="24" class="em_height">
 										<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/spacer.gif" alt="space" height="1" width="1" style="display: block;" border="0" />
 									</td>
 								</tr>
 								<tr>
-									<td class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; font-weight: bold; line-height: 20px; padding-bottom: 12px;">PICK-UP INFORMATION</td>
-									<td width="37" class="em_side">
-										<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/spacer.gif" height="1" width="1" alt="" style="display:block;border:none;" />
-									</td>
-									<td valign="top" align="center">
-										<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
-											<tr>
-												<td height="7" style="line-height: 0px;font-size: 0px;">
-													<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/spacer.gif" height="1" width="1" alt="" style="display:block;border:none;" />
-												</td>
-											</tr>
-											<tr>
-												<td height="1" bgcolor="#000000" style="line-height:1px;font-size:1px;">
-													<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/spacer.gif" height="1" width="1" alt="" style="display:block;border:none;" />
-												</td>
-											</tr>
-											<tr>
-												<td height="8" style="line-height: 0px;font-size: 0px;">
-													<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/spacer.gif" height="1" width="1" alt="" style="display:block;border:none;" />
-												</td>
-											</tr>
-										</table>
+									<td class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; letter-spacing: 3px;">PICK-UP INFORMATION</td>
+									<td class="em_side">
+										<hr></hr>
 									</td>
 								</tr>
-
-
+								<tr>
+									<td height="14" class="em_height">
+										<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/spacer.gif" alt="space" height="1" width="1" style="display: block;" border="0" />
+									</td>
+								</tr>
 								<tr>
 									<td align="center" valign="top" style="padding-bottom: 20px;">
 										<table width="100%" border="0" cellspacing="0" cellpadding="0" class="em_wrapper">
 											<tbody>
 												<tr>
-													<td style="width: 10%;" valign="top" align="" width="24" class="em_full_img1">
+													<td style="" valign="top" align="" width="24" class="em_full_img1">
 														<img src="https://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/6f86199d-ecbb-4570-8da1-faa0f5a7cca7.png" alt="pickuplocation" width="30" class="em_img" border="0" />
 
 													</td>
@@ -542,7 +412,7 @@ SET @openingHours = 'DEFAULT FOR TEST' SET @StoreHoursFormatted = '' SET @StoreD
 														<xsl:value-of select="storeDetails/state" />
 														<xsl:value-of select="storeDetails/postcode" />
 														<br />
-														<a href="" class="em_black a" style="text-decoration: underline;">View Directions</a>
+														<a target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&amp;query={normalize-space(storeDetails/store-name)}+{normalize-space(storeDetails/address-line1)}+{normalize-space(storeDetails/suburb)}+{normalize-space(storeDetails/state)}+{normalize-space(storeDetails/postcode)}" class="em_black a" style="text-decoration: underline; font-family: Arial, sans-serif; font-size: 14px; color: #000000; font-weight: normal; line-height: 20px;">View Directions</a>
 													</td>
 												</tr>
 											</tbody>
@@ -613,18 +483,18 @@ SET @openingHours = 'DEFAULT FOR TEST' SET @StoreHoursFormatted = '' SET @StoreD
 								</tr>
 								%%[endif]%%
 								<tr>
-									<td align="center" valign="top" style="padding-bottom: 20px;">
-										<table width="100%" border="0" cellspacing="0" cellpadding="0" class="em_wrapper">
+									<td align="left" valign="top" style="padding-bottom: 20px;">
+										<table style="width: 190%" border="0" cellspacing="0" cellpadding="0" class="em_wrapper">
 											<tbody>
 												<tr>
-													<td style="width: 10%;" valign="top" align="" width="24" class="em_full_img1">
+													<td style="width:9%;" valign="top" align=""  class="em_full_img1">
 														<img src="https://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/689a3138-fde4-433a-b0c8-e52b2e73b7c8.png" alt="pickuplocation" width="30" class="em_img" border="0" />
 													</td>
-													<td width="140" class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px;font-weight:bold; color: #000000; line-height: 20px; width: 140px;">Nominated Collection</td>
+													<td  class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px;font-weight:bold; color: #000000; line-height: 20px; width: 140px;">Nominated Collection</td>
 												</tr>
 												<tr>
-													<td valign="top" align="center" width="24" class="em_full_img1"></td>
-													<td class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px;">
+													<td valign="top" align="center"  class="em_full_img1"></td>
+													<td class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; width: 100%;">
 If you've nominated someone else to collect your order,please let them know they'll need to present this email and their photo ID in-store.
 </td>
 												</tr>
@@ -645,11 +515,22 @@ If you've nominated someone else to collect your order,please let them know they
 	<xsl:template match="message/additional-content/order/order-change/Order-Change-totals">
 		<tr>
 			<td align="center" valign="top">
-				<table align="center" class="em_main_table" bgcolor="#f7f7f7" width="640" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed; width: 640px;">
+				<table align="center" class="em_main_table" bgcolor="#FFF" width="640" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed; width: 640px;">
 					<tbody>
 						<tr>
 							<td height="30" class="em_height" style="line-height: 0px; font-size: 0px;">
-								<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/1503390624690_spacer.gif" alt="space" width="1" height="1" border="0" style="display: block;" />
+							</td>
+						</tr>
+						<tr>
+							<td height="20" style="line-height: 0px; font-size: 0px;">
+							</td>
+						</tr>
+						<tr>
+							<td height="10" style="line-height: 0px; font-size: 0px; border-bottom: 1px dashed #878787;padding-left: 63px; padding-right: 63px;">
+							</td>
+						</tr>
+						<tr>
+							<td height="40" style="line-height: 0px; font-size: 0px;">
 							</td>
 						</tr>
 						<tr>
@@ -775,35 +656,25 @@ If you've nominated someone else to collect your order,please let them know they
 							</td>
 						</tr>
 						<tr>
-							<td valign="top" align="center" style="padding:0px 63px;" class="em_aside">
-								<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
-									<tr>
-										<td height="20" style="line-height: 0px; font-size: 0px;">
-											<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/1503390624690_spacer.gif" alt="space" width="1" height="1" border="0" style="display: block;" />
-										</td>
-									</tr>
-									<tr>
-										<td height="10" style="line-height: 0px; font-size: 0px; border-bottom: 1px dashed #878787;padding-left: 63px; padding-right: 63px;">
-											<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/1503390624690_spacer.gif" alt="space" width="1" height="1" border="0" style="display: block;" />
-										</td>
-									</tr>
-									<tr>
-										<td height="40" style="line-height: 0px; font-size: 0px;">
-											<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/1503390624690_spacer.gif" alt="space" width="1" height="1" border="0" style="display: block;" />
-										</td>
-									</tr>
-									<tr>
-
-										<td class="em_grey em_aside" style="font-family: Arial, sans-serif; font-size: 10px; line-height: 10px;padding-left: 63px; padding-right: 63px;">
-Please be aware that some items, including those marked for clearance aren't eligible for change of mind return or exchange.
-</td>
-									</tr>
-									<tr>
-										<td height="40" style="line-height: 0px; font-size: 0px;">
-											<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/1503390624690_spacer.gif" alt="space" width="1" height="1" border="0" style="display: block;" />
-										</td>
-									</tr>
-								</table>
+							<td height="20" style="line-height: 0px; font-size: 0px;">
+							</td>
+						</tr>
+						<tr>
+							<td height="10" style="line-height: 0px; font-size: 0px; border-bottom: 1px dashed #878787; padding-left: 63px; padding-right: 63px;">
+							</td>
+						</tr>
+						<tr>
+							<td height="40" style="line-height: 0px; font-size: 0px;">
+							</td>
+						</tr>
+						<tr>
+							<td class="em_grey em_aside" style="font-family: Arial, sans-serif; font-size: 10px; line-height: 10px;padding-left: 63px; padding-right: 63px;">
+								Please be aware that some items, including those marked for clearance aren't eligible for change of mind return or exchange.
+							</td>
+						</tr>
+						<tr>
+							<td height="40" style="line-height: 0px; font-size: 0px;">
+								<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/1503390624690_spacer.gif" alt="space" width="1" height="1" border="0" style="display: block;" />
 							</td>
 						</tr>
 					</tbody>
@@ -873,14 +744,13 @@ Please be aware that some items, including those marked for clearance aren't eli
 														<table align="left" width="265" border="0" cellspacing="0" cellpadding="0" style="width: 265px;" class="em_wrapper">
 															<tr>
 																<td class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; padding-bottom: 12px;">
-Order date: %%=v(@FormatDate)=%%
-</td>
+																	Order date: %%=v(@FormatDate)=%%
+																</td>
 															</tr>
 														</table>
 														<!--     [if gte mso 9]></td><td valign="top"><![endif]     -->
 														<table align="left" width="265" border="0" cellspacing="0" cellpadding="0" style="width: 265px;" class="em_wrapper">
 															<tr>
-
 																<td class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; padding-bottom: 12px;">
 																	Order number:
 																	<xsl:value-of select="order-number" />
