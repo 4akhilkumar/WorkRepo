@@ -254,9 +254,9 @@ SET @Barcode = BarCodeURL(@OrderNum,'Code93', 400, 80, 0)]%%
 													</xsl:if>
 												</p>
 											</div>
-											<div class="other_item_details" style="display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr);">
+											<div class="other_item_details" style="/* display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); */">
 												<xsl:if test="colour!=''">
-												<div class="color">
+												<div style="float: left; margin-right: 15px" class="color">
 													<span>
 														<!-- Colour: Black -->
 															Color: <xsl:value-of select="colour" />
@@ -264,7 +264,7 @@ SET @Barcode = BarCodeURL(@OrderNum,'Code93', 400, 80, 0)]%%
 													</div>
 												</xsl:if>
 												<xsl:if test="OrderQty!=''">
-												<div class="item_qty">
+												<div style="float: left; margin-right: 15px" class="item_qty">
 													<span>
 														<!-- QTY: 1 -->
 															QTY: <xsl:value-of select="OrderQty" />
@@ -272,7 +272,7 @@ SET @Barcode = BarCodeURL(@OrderNum,'Code93', 400, 80, 0)]%%
 													</div>
 												</xsl:if>
 												<xsl:if test="size1!=''">
-												<div class="item_size">
+												<div style="float: left; margin-right: 15px" class="item_size">
 													<span>
 														<!-- Size: Small -->
 															Size: <xsl:value-of select="size1" /> <xsl:if test="size2!=''"> <xsl:value-of select="size2" /> </xsl:if>															
@@ -280,7 +280,7 @@ SET @Barcode = BarCodeURL(@OrderNum,'Code93', 400, 80, 0)]%%
 													</div>
 												</xsl:if>
 												<xsl:if test="item-id!=''">
-												<div class="item_sku">
+												<div style="float: left; margin-right: 15px" class="item_sku">
 													<span>
 														<!-- SKU: 23455524 -->
 															SKU: <xsl:value-of select="item-id" />	
@@ -694,30 +694,23 @@ If you've nominated someone else to collect your order,please let them know they
 		" SET @FormatDate = Format(SystemDateToLocalDate(@date), "dddd dd MMM yyyy") ]%%
 		<tr>
 			<td align="center" valign="top">
-				<table align="center" class="em_main_table" width="640" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed; width: 640px;" bgcolor="#e6e6e6">
+				<table align="center" class="em_main_table" width="640" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed; width: 640px;" bgcolor="#FFF">
 					<tbody>
 						<tr>
+							<td valign="top" align="center" style="padding:0px 63px 20px 63px;" class="em_aside">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+									<tbody>
+										<tr>
+											<td class="em_black" valign="top" align="left" style="width:50%; font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; letter-spacing: 3px;">YOUR PAYMENT SUMMARY</td>
+											<td class="em_side"><hr style="border-width: 2px 0 0 0; border-color: #FFF;" /></td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+						<tr>
 							<td valign="top" align="center" bgcolor="#ffffff" style="padding-left: 63px; padding-right: 63px;">
-								<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
-									<!-- <tr>
-										<td height="20" style="line-height: 0px; font-size: 0px;">
-											<img src="http://image.email.myerone.com.au/lib/fe9713737563057f71/m/1/1503390624690_spacer.gif" alt="space" width="1" height="1" border="0" style="display: block;" />
-										</td>
-									</tr> -->
-									<tr>
-										<td class="em_side" style="padding-bottom: 12px;">
-											<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
-												<tbody>
-													<tr>
-														<td class="em_black em_aside1" valign="top" align="left" style="width:50%; font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; font-weight: 300; letter-spacing: 2px;">YOUR PAYMENT SUMMARY</td>
-														<td class="em_side">
-															<hr style="border-width: 2px 0 0 0; border-color: #00000030;" />
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</td>
-									</tr>
+								<table style="table-layout: fixed;" align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
 									<tr>
 										<td valign="top" align="center" class="em_aside">
 											<table align="left" width="240" border="0" cellspacing="0" cellpadding="0" style="width: 240px;" class="em_wrapper">
@@ -730,91 +723,46 @@ If you've nominated someone else to collect your order,please let them know they
 										</td>
 									</tr>
 									<tr>
-										<td valign="top" align="center" class="em_aside">
-											<table style="table-layout: fixed;" align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
-												<tr>
-													<td valign="top" align="center" style="display: flex; flex-wrap: wrap; column-gap: 1rem;">
-														<table align="left" border="0" cellspacing="0" cellpadding="0" class="em_wrapper">
-															<tr>
-																<td class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; padding-bottom: 12px;">
-																	<b>Order date:</b> %%=v(@FormatDate)=%%
-																</td>
-															</tr>
-														</table>
-														<!--     [if gte mso 9]></td><td valign="top"><![endif]     -->
-														<table align="left" border="0" cellspacing="0" cellpadding="0" class="em_wrapper">
-															<tr>
-																<td class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; padding-bottom: 12px;">
-																	<b>Order number:</b>
-																	<xsl:value-of select="order-number" />
-																</td>
-															</tr>
-														</table>
-													</td>
-												</tr>
-											</table>
+										<td class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; padding-bottom: 12px;">
+											
+											<div style="float:left; margin-right: 20px;"> <span> <b>Order date:</b> %%=v(@FormatDate)=%% </span> </div>
+											<div style="float:left;"> <span> <b>Order number:</b> <xsl:value-of select="order-number" /> </span> </div>
+											
 										</td>
 									</tr>
 									<!--     Loops the payments methods     -->
-									<tr style="display: flex; flex-wrap: wrap; column-gap: 1rem;">
-										<xsl:for-each select="order-change/collection-details/collection-detail">
-											<td valign="top" align="center" class="em_aside">
-												<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
-													<tr>
-														<td valign="top" align="center">
-															<xsl:if test="payment-type!=''">
-																<table align="left" border="0" cellspacing="0" cellpadding="0" class="em_wrapper">
-																	%%[ SET @PymtTp = '
-																	<xsl:value-of select="payment-type" />
-																	' SET @PymtVia = '
-																	<xsl:value-of select="paid-via" />
-																	'
-SET @Payment = IIF((@PymtTp=='PAYPAL'), 'PayPal', IIF((@PymtTp=='AFTERPAY'),'Afterpay', IIF((@PymtTp=='MYER_VISA'),'Myer Visa', IIF((@PymtTp=='MYERV BLACKH'),'Myer Black', IIF((@PymtTp=='MYERV LOYALTY'),'Myer Loyalty', IIF((@PymtTp=='MYERV GIFT'), 'Myer Gift Card', IIF((@PymtTp=='MYERV RETURN'), 'Myer Return', IIF((@PymtTp=='MYER_CARD'), 'Myer Card', IIF((@PymtTp=='POS_CREDIT_CARD'), 'Credit Card (POS)', IIF((@PymtTp=='POS_GIFTRETURN_CARD'), 'Myer Return (POS)', IIF((@PymtTp=='POS_CASH'), 'Cash (POS)', IIF((@PymtTp=='CREDIT_CARD'), 'Credit Card', IIF((@PymtTp=='POS_DEBIT_CARD'), 'Debit Card (POS)', IIF((@PymtTp=='POS_MYER_REWD_CARD'), 'Myer Reward Card', IIF((@PymtTp=='POS_MYER_CARD'), 'Myer Card (POS)', IIF((@PymtTp=='POS_MYER_VISA'), 'Myer Card (POS)', IIF((@PymtTp=='POS_CBA_LOYALTY'), 'CBA Loyalty (POS)', IIF((@PymtTp=='MYERV MULTI'), 'Myer Multi', IIF((@PymtTp=='HUMM'),'HUMM', IIF((@PymtTp=='POS_MYER_VISA_INTFRE'), 'Myer Visa (POS)', IIF((@PymtTp=='MYERV XMAS'), 'Myer Xmas',IIF((@PymtTp=='CommAwards'), 'CommBank Awards',IIF((@PymtTp=='Velocity'), 'Velocity Points',Replace(@PymtTp, '_', ' ')))) )))))))))))))))))))) ]%%
-																	<tr>
-																		<td class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; padding-bottom: 12px;"><b>Payment type:</b> %%=v(@Payment)=%%</td>
-																	</tr>
-																	<xsl:if test="paid-via!=''">
-																		<tr>
-																			<td class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; padding-bottom: 12px;"><b>Paid via:</b> %%=v(@PymtVia)=%%</td>
-																		</tr>
-																	</xsl:if>
-																</table>
-															</xsl:if>
-															<xsl:if test="card-number!=''">
-																<xsl:if test="payment-type!='MYER_CARD'">
-																	<!--     [if gte mso 9]></td><td valign="top"><![endif]     -->
-																	<table align="left" border="0" cellspacing="0" cellpadding="0" class="em_wrapper">
-																		<tr>
-																			<td class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; padding-bottom: 12px;">
-																				<b>Card number:</b>
-																				<xsl:value-of select="card-number" />
-																			</td>
-																		</tr>
-																	</table>
-																</xsl:if>
-															</xsl:if>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</xsl:for-each>
-										<td valign="top" align="center" class="em_aside">
-											<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
-												<tr>
-													<td valign="top" align="center">
-														<table align="left" border="0" cellspacing="0" cellpadding="0" class="em_wrapper">
-															<tr>
-																<td class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; padding-bottom: 12px;">
-																	<b>Email:</b>
-																	<a href="mailto:%%emailaddr%%" style="text-decoration:none !important;color:#000000 !important;font-size:normal;">
-																		<span style="text-decoration:none !important;color:#000000 !important;">%%emailaddr%%</span>
-																	</a>
-																</td>
-															</tr>
-														</table>
-													</td>
-												</tr>
-											</table>
+									<tr style="/* display: flex; flex-wrap: wrap; column-gap: 1rem; */">
+										<td class="em_black" valign="top" align="left" style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 20px; padding-bottom: 12px;">
+											<xsl:for-each select="order-change/collection-details/collection-detail">
+												<xsl:if test="payment-type!=''">			
+													%%[ SET @PymtTp = '
+													<xsl:value-of select="payment-type" />
+													' SET @PymtVia = '
+													<xsl:value-of select="paid-via" />
+													'
+	SET @Payment = IIF((@PymtTp=='PAYPAL'), 'PayPal', IIF((@PymtTp=='AFTERPAY'),'Afterpay', IIF((@PymtTp=='MYER_VISA'),'Myer Visa', IIF((@PymtTp=='MYERV BLACKH'),'Myer Black', IIF((@PymtTp=='MYERV LOYALTY'),'Myer Loyalty', IIF((@PymtTp=='MYERV GIFT'), 'Myer Gift Card', IIF((@PymtTp=='MYERV RETURN'), 'Myer Return', IIF((@PymtTp=='MYER_CARD'), 'Myer Card', IIF((@PymtTp=='POS_CREDIT_CARD'), 'Credit Card (POS)', IIF((@PymtTp=='POS_GIFTRETURN_CARD'), 'Myer Return (POS)', IIF((@PymtTp=='POS_CASH'), 'Cash (POS)', IIF((@PymtTp=='CREDIT_CARD'), 'Credit Card', IIF((@PymtTp=='POS_DEBIT_CARD'), 'Debit Card (POS)', IIF((@PymtTp=='POS_MYER_REWD_CARD'), 'Myer Reward Card', IIF((@PymtTp=='POS_MYER_CARD'), 'Myer Card (POS)', IIF((@PymtTp=='POS_MYER_VISA'), 'Myer Card (POS)', IIF((@PymtTp=='POS_CBA_LOYALTY'), 'CBA Loyalty (POS)', IIF((@PymtTp=='MYERV MULTI'), 'Myer Multi', IIF((@PymtTp=='HUMM'),'HUMM', IIF((@PymtTp=='POS_MYER_VISA_INTFRE'), 'Myer Visa (POS)', IIF((@PymtTp=='MYERV XMAS'), 'Myer Xmas',IIF((@PymtTp=='CommAwards'), 'CommBank Awards',IIF((@PymtTp=='Velocity'), 'Velocity Points',Replace(@PymtTp, '_', ' ')))) )))))))))))))))))))) ]%%
+																										
+													<div style="float:left; margin-right: 20px;"> <span> <b>Payment type:</b> %%=v(@Payment)=%% </span> </div>
+
+													<xsl:if test="paid-via!=''">
+													<div style="float:left; margin-right: 20px;"> <span> <b>Paid via:</b> %%=v(@PymtVia)=%% </span> </div>
+													</xsl:if>
+												</xsl:if>
+												<xsl:if test="card-number!=''">
+													<xsl:if test="payment-type!='MYER_CARD'">
+														<!--     [if gte mso 9]></td><td valign="top"><![endif]     -->
+														<div style="float:left; margin-right: 20px;"> <span> <b>Card number:</b> <xsl:value-of select="card-number" /> </span> </div>
+													</xsl:if>
+												</xsl:if>
+											</xsl:for-each>
+											<div style="float:left; margin-right: 20px;"> 
+												<span> 
+													<b>Email:</b> 
+													<a href="mailto:%%emailaddr%%" style="text-decoration:none !important;color:#000000 !important;font-size:normal;">
+														%%emailaddr%%
+													</a> 
+												</span> 
+											</div>
 										</td>
 									</tr>
 									<tr>
